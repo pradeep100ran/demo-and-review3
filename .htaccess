@@ -1,0 +1,22 @@
+RewriteEngine On
+RewriteBase /
+
+# Disable directory listings (mod_autoindex)
+Options -Indexes
+
+ErrorDocument 404 /error/error404.html
+
+# Look for index.html then index.php in the directory being requested
+DirectoryIndex index.html index.php
+
+# Prevent mod_dir appending the trailing slash
+DirectorySlash Off
+
+RewriteEngine On
+
+# If request a directory without a trailing slash then rewrite to append it
+# This allows DirectoryIndex to work as intended
+# - exclude the document root
+RewriteCond $1 !/$
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule (.+) $1/ [L]

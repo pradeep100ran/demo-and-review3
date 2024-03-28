@@ -1,0 +1,44 @@
+RewriteEngine On
+RewriteBase /
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^([^\.]+)$ $1.php [NC,L]
+
+
+
+
+
+
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ /index.php [L]
+
+
+
+RewriteEngine on
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule (.+)/.*$ $1/index.php [L,QSA]
+
+
+
+# Disable directory listings (mod_autoindex)
+Options -Indexes
+
+ErrorDocument 404 /error/error404.html
+
+# Look for index.html then index.php in the directory being requested
+DirectoryIndex index.html index.php
+
+# Prevent mod_dir appending the trailing slash
+DirectorySlash Off
+
+RewriteEngine On
+
+# If request a directory without a trailing slash then rewrite to append it
+# This allows DirectoryIndex to work as intended
+# - exclude the document root
+RewriteCond $1 !/$
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule (.+) $1/ [L]
